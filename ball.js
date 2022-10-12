@@ -31,7 +31,7 @@ class Ball {
   }
 
   reset() {
-    this.pos = createVector(width / 2, height / 2);
+    this.pos = createVector(width / 2, height / 2 + skorbar / 2);
     this.kecepatanX = random(4, 5);
     this.kecepatanY = random(3.5, 4.5);
   }
