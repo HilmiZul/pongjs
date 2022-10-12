@@ -7,7 +7,8 @@ let skorbar = 50;
 let gamePlay = false;
 
 function setup() {
-	createCanvas(750, 400);
+	// createCanvas(750, 400);
+	createCanvas(windowWidth / 2, windowHeight / 2);
 
 	wMeja = width;
 	hMeja = height;
