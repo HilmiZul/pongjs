@@ -43,13 +43,15 @@ function meja() {
 	strokeWeight(5);
 	rect(0, 0 + skorbar, wMeja, hMeja - skorbar);
 	line(wMeja / 2, 0 + skorbar, wMeja / 2, hMeja);
+	strokeWeight(3);
+	line(0, hMeja / 2 + skorbar / 2, wMeja, hMeja / 2 + skorbar / 2);
 	if (!gamePlay) {
 		push();
 		fill(255);
 		noStroke();
 		textSize(20);
 		textAlign(CENTER, CENTER)
-		text("TEKAN ENTER", width / 2, 30);
+		text("TEKAN SPASI", width / 2, 30);
 		pop();
 	}
 	pop();
@@ -58,7 +60,7 @@ function meja() {
 function skor() {
 	push();
 	fill(255);
-	textSize(20);
+	textSize(25);
 	textAlign(CENTER, CENTER)
 	text(player_kiri.skor, 30, 30);
 	text(player_kanan.skor, width - 40, 30);
@@ -69,12 +71,12 @@ function draw() {
 	background(100, 100, 250);
 
 	meja();
+	skor();
 
 	bola.show();
 	player_kiri.show();
 	player_kanan.show();
 
-	skor();
 
 	if (gamePlay) {
 		game();
@@ -86,7 +88,7 @@ function keyPressed() {
 	if (key === "s") player_kiri.bawah = true;
 	if (key === "i") player_kanan.atas = true;
 	if (key === "k") player_kanan.bawah = true;
-	if (keyCode === RETURN) gamePlay = true;
+	if (key === " ") gamePlay = true;
 	if (keyCode === ESCAPE) gamePlay = false;
 }
 

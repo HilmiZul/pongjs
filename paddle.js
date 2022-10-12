@@ -15,7 +15,7 @@ class Paddle {
     fill(this.color);
     noStroke();
     if (this.player === "kiri") {
-      this.pos.x = 0;
+      this.pos.x = 0 + this.width;
       rect(
         this.pos.x,
         this.pos.y,
@@ -23,7 +23,7 @@ class Paddle {
         this.height,
       );
     } else {
-      this.pos.x = width - this.width
+      this.pos.x = width - this.width * 2
       rect(
         this.pos.x,
         this.pos.y,

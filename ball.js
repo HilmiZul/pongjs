@@ -1,10 +1,10 @@
 class Ball {
   constructor() {
-    this.size = 15;
-    this.pos = createVector(width / 2, height / 2);
+    this.size = 20;
+    this.pos = createVector(width / 2, height / 2 + skorbar / 2);
     this.kecepatanX = random(4, 5);
     this.kecepatanY = random(3.5, 4);
-    this.warna = color(255, 255, 255);
+    this.warna = color(50, 255, 50);
   }
 
   show() {
