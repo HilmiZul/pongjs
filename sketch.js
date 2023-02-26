@@ -1,3 +1,10 @@
+let video;
+let poseNet;
+let poses = [];
+let pose;
+let leftWrist;
+let rightWrist;
+
 let player_kiri;
 let player_kanan;
 let bola;
@@ -6,9 +13,20 @@ let hMeja;
 let skorbar = 50;
 let gamePlay = false;
 
+
 function setup() {
 	// createCanvas(750, 400);
-	createCanvas(windowWidth / 2, windowHeight / 2);
+	createCanvas(windowWidth - 50, windowHeight - 50);
+
+	video = createCapture(VIDEO);
+  video.size(width, height);
+
+  poseNet = ml5.poseNet(video, modelReady);
+  poseNet.on("pose", function (results) {
+    poses = results;
+  });
+
+  video.hide();
 
 	wMeja = width;
 	hMeja = height;
@@ -16,6 +34,10 @@ function setup() {
 	player_kiri = new Paddle("kiri", "red", 0);
 	player_kanan = new Paddle("kanan", "yellow", 0);
 	bola = new Ball()
+}
+
+function modelReady() {
+  select("#status").html("");
 }
 
 function game() {
@@ -69,6 +91,8 @@ function skor() {
 
 function draw() {
 	background(100, 100, 250);
+	image(video, 0, 0, width, height)
+	// translate(width, 0)
 
 	meja();
 	skor();

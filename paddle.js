@@ -1,35 +1,45 @@
 class Paddle {
   constructor(player, warna, skor) {
     this.player = player;
-    this.width = 15;
-    this.height = 60;
+    this.width = 30;
+    this.height = 130;
     this.pos = createVector(0, height / 2);
     this.color = color(warna);
     this.atas = false;
     this.bawah = false;
-    this.kecepatan = 7;
+    this.kecepatan = 8;
     this.skor = skor;
   }
 
   show() {
     fill(this.color);
     noStroke();
-    if (this.player === "kiri") {
-      this.pos.x = 0 + this.width;
-      rect(
-        this.pos.x,
-        this.pos.y,
-        this.width,
-        this.height,
-      );
-    } else {
-      this.pos.x = width - this.width * 2
-      rect(
-        this.pos.x,
-        this.pos.y,
-        this.width,
-        this.height,
-      );
+    if (poses.length > 0) {
+      pose = poses[0].pose;
+      leftWrist = pose.leftWrist;
+      rightWrist = pose.rightWrist;
+
+      if (this.player === "kiri") {
+        // ellipse(leftWrist.x, leftWrist.y, 50, 50)
+        this.pos.x = 0 + this.width;
+        this.pos.y = leftWrist.y
+        rect(
+          this.pos.x,
+          this.pos.y,
+          this.width,
+          this.height,
+          );    
+      } else {
+        // ellipse(rightWrist.x, rightWrist.y, 50, 50)
+        this.pos.x = width - this.width * 2
+        this.pos.y = rightWrist.y
+        rect(
+          this.pos.x,
+          this.pos.y,
+          this.width,
+          this.height,
+        );
+      }
     }
   }
 
