@@ -14,15 +14,15 @@ class Paddle {
   show() {
     fill(this.color);
     noStroke();
-    if (poses.length > 0) {
+    /*if (poses.length > 0) {
       pose = poses[0].pose;
       leftWrist = pose.leftWrist;
-      rightWrist = pose.rightWrist;
+      rightWrist = pose.rightWrist;*/
 
       if (this.player === "kiri") {
         // ellipse(leftWrist.x, leftWrist.y, 50, 50)
         this.pos.x = 0 + this.width;
-        this.pos.y = leftWrist.y
+        //this.pos.y = leftWrist.y
         rect(
           this.pos.x,
           this.pos.y,
@@ -32,7 +32,7 @@ class Paddle {
       } else {
         // ellipse(rightWrist.x, rightWrist.y, 50, 50)
         this.pos.x = width - this.width * 2
-        this.pos.y = rightWrist.y
+        //this.pos.y = rightWrist.y
         rect(
           this.pos.x,
           this.pos.y,
@@ -40,7 +40,7 @@ class Paddle {
           this.height,
         );
       }
-    }
+    //}
   }
 
   gerak() {

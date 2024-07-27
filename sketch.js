@@ -15,18 +15,18 @@ let gamePlay = false;
 
 
 function setup() {
-	// createCanvas(750, 400);
-	createCanvas(windowWidth - 50, windowHeight - 50);
+	//createCanvas(950, 550);
+	createCanvas(windowWidth - 50, windowHeight - 150);
 
-	video = createCapture(VIDEO);
-  video.size(width, height);
+	//video = createCapture(VIDEO);
+  //video.size(width, height);
 
-  poseNet = ml5.poseNet(video, modelReady);
-  poseNet.on("pose", function (results) {
-    poses = results;
-  });
+  //poseNet = ml5.poseNet(video, modelReady);
+  //poseNet.on("pose", function (results) {
+   // poses = results;
+  //});
 
-  video.hide();
+  //video.hide();
 
 	wMeja = width;
 	hMeja = height;
@@ -36,9 +36,9 @@ function setup() {
 	bola = new Ball()
 }
 
-function modelReady() {
-  select("#status").html("");
-}
+//function modelReady() {
+//  select("#status").html("");
+//}
 
 function game() {
 	// bola
@@ -46,12 +46,14 @@ function game() {
 	bola.bouncing();
 
 	// player kiri
+	player_kiri.show()
 	player_kiri.gerak();
 	player_kiri.nepak(bola);
 	player_kiri.goal(bola);
 	player_kiri.cekTepi();
 
 	// player kanan
+	player_kanan.show()
 	player_kanan.gerak();
 	player_kanan.nepak(bola);
 	player_kanan.goal(bola);
@@ -91,7 +93,7 @@ function skor() {
 
 function draw() {
 	background(100, 100, 250);
-	image(video, 0, 0, width, height)
+	//image(video, 0, 0, width, height)
 	// translate(width, 0)
 
 	meja();
