@@ -14,33 +14,75 @@ class Paddle {
   show() {
     fill(this.color);
     noStroke();
-    /*if (poses.length > 0) {
-      pose = poses[0].pose;
-      leftWrist = pose.leftWrist;
-      rightWrist = pose.rightWrist;*/
 
-      if (this.player === "kiri") {
-        // ellipse(leftWrist.x, leftWrist.y, 50, 50)
-        this.pos.x = 0 + this.width;
-        //this.pos.y = leftWrist.y
-        rect(
-          this.pos.x,
-          this.pos.y,
-          this.width,
-          this.height,
-          );    
-      } else {
-        // ellipse(rightWrist.x, rightWrist.y, 50, 50)
-        this.pos.x = width - this.width * 2
-        //this.pos.y = rightWrist.y
-        rect(
-          this.pos.x,
-          this.pos.y,
-          this.width,
-          this.height,
-        );
+    for (let i = 0; i < hands.length; i++) {
+      let hand = hands[i];
+      for (let j = 0; j < hand.keypoints.length; j++) {
+
+        // tangan kiri
+        if(hand.handedness == 'Left' && this.player === 'kiri') {
+          fill(213, 0, 0);
+          leftWrist = hand.keypoints[0];
+          this.pos.x = 0 + this.width;
+          // this.pos.y = leftWrist.y
+          this.pos.y = lerp(this.pos.y, leftWrist.y, 0.02)
+          stroke(0)
+          strokeWeight(2)
+          rect(
+            this.pos.x,
+            this.pos.y,
+            this.width,
+            this.height,
+          );
+        }
+
+        // tangan kanan
+        if(hand.handedness == 'Right' && this.player === 'kanan'){
+          fill(0, 213, 0);
+          rightWrist = hand.keypoints[0];
+          this.pos.x = width - this.width * 2
+          // this.pos.y = rightWrist.y
+          this.pos.y = lerp(this.pos.y, rightWrist.y, 0.02)
+          stroke(0)
+          strokeWeight(2)
+          rect(
+            this.pos.x,
+            this.pos.y,
+            this.width,
+            this.height,
+          );
+        }
       }
-    //}
+    }
+
+    // ml5 versi 0.1.x
+    // if (poses.length > 0) {
+    //   pose = poses[0].pose;
+    //   leftWrist = pose.leftWrist;
+    //   rightWrist = pose.rightWrist;
+    //
+    //   if (this.player === "kiri") {
+    //     // ellipse(leftWrist.x, leftWrist.y, 50, 50)
+    //     this.pos.x = 0 + this.width;
+    //     this.pos.y = leftWrist.y
+    //     rect(
+    //       this.pos.x,
+    //       leftWrist.y,
+    //       this.width,
+    //       this.height,
+    //       );    
+    //   } else {
+    //     // ellipse(rightWrist.x, rightWrist.y, 50, 50)
+    //     this.pos.x = width - this.width * 2
+    //     this.pos.y = rightWrist.y
+    //     rect(
+    //       this.pos.x,
+    //       rightWrist.y,
+    //       this.width,
+    //       this.height,
+    //     );
+    //   }
+    // }
   }
 
   gerak() {
