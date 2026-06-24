@@ -1,5 +1,5 @@
 let video;
-let poseNet;
+let handPose;
 let hands = [];
 let pose;
 let leftWrist;
@@ -20,7 +20,7 @@ let gameWin = {
 let poin = 11
 
 function preload() {
-  poseNet = ml5.handPose({ flipped: true });
+  handPose = ml5.handPose({ flipped: true });
 }
 
 function setup() {
@@ -30,17 +30,7 @@ function setup() {
   video = createCapture(VIDEO, { flipped: true });
   video.size(width, height);
   video.hide();
-  poseNet.detectStart(video, modelReady);
-
-	// video = createCapture(VIDEO);
-	//  video.size(width, height);
-	//
-	//  poseNet = ml5.poseNet(video, modelReady);
-	//  poseNet.on("pose", function (results) {
-	//    poses = results;
-	//  });
-
-  // video.hide();
+  handPose.detectStart(video, modelReady);
 
 	wMeja = width;
 	hMeja = height;
@@ -119,19 +109,9 @@ function skor() {
 	pop();
 }
 
-function gamePause() {
-  noLoop()
-}
-
-function gameStart() {
-  noLoop()
-  loop()
-}
 
 function draw() {
 	background(100, 100, 250);
-	//image(video, 0, 0, width, height)
-	// translate(width, 0)
 
 	meja();
 	skor();
@@ -160,8 +140,6 @@ function draw() {
     noLoop()
     push()
     background(0, 0, 0, 200)
-    // translate(width, 0)
-    // scale(-1, 1)
     textSize(60)
     textAlign(CENTER, CENTER)
     text("Selamat Player Kiri Menang!", width / 2, height / 2)
@@ -173,8 +151,6 @@ function draw() {
     noLoop()
     push()
     background(0, 0, 0, 200)
-    // translate(width, 0)
-    // scale(-1, 1)
     textSize(60)
     textAlign(CENTER, CENTER)
     text("Selamat Player Kanan Menang!", width / 2, height / 2)
@@ -186,10 +162,12 @@ function draw() {
 }
 
 function keyPressed() {
-	if (key === "w") player_kiri.atas = true;
-	if (key === "s") player_kiri.bawah = true;
-	if (key === "i") player_kanan.atas = true;
-	if (key === "k") player_kanan.bawah = true;
+  // DISABLE KEY CONTROL sementara, karena kontrol player dihandle oleh handPose wrist
+	// if (key === "w") player_kiri.atas = true;
+	// if (key === "s") player_kiri.bawah = true;
+	// if (key === "i") player_kanan.atas = true;
+	// if (key === "k") player_kanan.bawah = true;
+
 	if (key === " ") gamePlay = true
 	if (keyCode === RETURN) {
     gamePlay = false
@@ -204,9 +182,10 @@ function keyPressed() {
 	if (keyCode === ESCAPE) gamePlay = false;
 }
 
-function keyReleased() {
-	player_kiri.atas = false;
-	player_kiri.bawah = false;
-	player_kanan.atas = false;
-	player_kanan.bawah = false;
-}
+// DISALBE KEY CONTROL
+// function keyReleased() {
+// 	player_kiri.atas = false;
+// 	player_kiri.bawah = false;
+// 	player_kanan.atas = false;
+// 	player_kanan.bawah = false;
+// }
