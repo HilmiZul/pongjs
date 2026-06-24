@@ -168,7 +168,10 @@ function keyPressed() {
 	// if (key === "i") player_kanan.atas = true;
 	// if (key === "k") player_kanan.bawah = true;
 
-	if (key === " ") gamePlay = true
+	if (key === " ") {
+    if(hands.length > 0) gamePlay = true
+  }
+
 	if (keyCode === RETURN) {
     gamePlay = false
     gameOver = false
