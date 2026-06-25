@@ -1,31 +1,29 @@
 class Paddle {
-  constructor(player, warna, skor) {
+  constructor(player, playerScore) {
     this.player = player;
     this.width = 30;
     this.height = 130;
     this.pos = createVector(0, height / 2);
-    this.color = color(warna);
-    this.atas = false;
-    this.bawah = false;
-    this.kecepatan = 8;
-    this.skor = skor;
+    this.color = color(0, 213, 0);
+    this.move = 8;
+    this.score = playerScore;
   }
 
   show() {
     fill(this.color);
     noStroke();
 
+    // initialize and detect hands.
+    // the X Y wrist position will replace the default this.pos
     for (let i = 0; i < hands.length; i++) {
       let hand = hands[i];
       for (let j = 0; j < hand.keypoints.length; j++) {
 
         // tangan kiri
         if(hand.handedness == 'Left' && this.player === 'kiri') {
-          fill(213, 0, 0);
           leftWrist = hand.keypoints[0];
           this.pos.x = 0 + this.width;
-          // this.pos.y = leftWrist.y
-          this.pos.y = lerp(this.pos.y, leftWrist.y, 0.02)
+          this.pos.y = lerp(this.pos.y, leftWrist.y, 0.01)
           stroke(0)
           strokeWeight(2)
           rect(
@@ -38,11 +36,9 @@ class Paddle {
 
         // tangan kanan
         if(hand.handedness == 'Right' && this.player === 'kanan'){
-          fill(0, 213, 0);
           rightWrist = hand.keypoints[0];
           this.pos.x = width - this.width * 2
-          // this.pos.y = rightWrist.y
-          this.pos.y = lerp(this.pos.y, rightWrist.y, 0.02)
+          this.pos.y = lerp(this.pos.y, rightWrist.y, 0.01)
           stroke(0)
           strokeWeight(2)
           rect(
@@ -56,38 +52,46 @@ class Paddle {
     }
   }
 
-  gerak() {
-    if(this.atas) this.pos.y = this.pos.y - this.kecepatan;
-    if(this.bawah) this.pos.y = this.pos.y + this.kecepatan;
-  }
-
-  nepak(bola) {
+  // this func will handle collide between Paddle and the ball
+  block(theBall) {
     let hit = collideRectCircle(
       this.pos.x, this.pos.y, this.width, this.height,
-      bola.pos.x, bola.pos.y, bola.size
+      theBall.pos.x, theBall.pos.y, theBall.size
     );
-    if(hit) bola.kecepatanX = bola.kecepatanX * -1;
+    if(hit) {
+      soundTok.play()
+      theBall.moveX = theBall.moveX * -1;
+    }
   }
 
-  goal(bola) {
+  // scoring based on player (left or right)
+  // reset ball position and direction
+  goal(theBall) {
     if(this.player === "kiri") {
-      if (bola.pos.x > width + bola.size) {
-        bola.reset();
-        this.skor++;
+      if (theBall.pos.x > width + theBall.size) {
+        theBall.reset();
+        this.score++;
         gamePlay = false;
+        soundPing.play()
       }
     } else {
-      if (bola.pos.x < 0 - bola.size) {
-        bola.reset();
-        bola.kecepatanX *= -1; // reverse servis bola pemain
-        this.skor++;
+      if (theBall.pos.x < 0 - theBall.size) {
+        theBall.reset();
+        theBall.moveX *= -1; // reverse servis bola pemain
+        this.score++;
         gamePlay = false;
+        soundPing.play()
       }
     }
   }
 
-  cekTepi() {
-    if(this.pos.y > height - this.height) this.pos.y = height - this.height;
-    if(this.pos.y < 0 + skorbar) this.pos.y = 0 + skorbar;
+  checkEdge() {
+    if(this.pos.y > height - this.height) {
+      this.pos.y = height - this.height;
+    }
+
+    if(this.pos.y < 0 + scoreBar) {
+      this.pos.y = 0 + scoreBar;
+    }
   }
 }
