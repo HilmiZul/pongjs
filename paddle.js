@@ -7,6 +7,7 @@ class Paddle {
     this.color = color(0, 213, 0);
     this.move = 8;
     this.score = playerScore;
+    this.isGoal = false
   }
 
   show() {
@@ -71,16 +72,24 @@ class Paddle {
       if (theBall.pos.x > width + theBall.size) {
         theBall.reset();
         this.score++;
+        this.isGoal = true
         gamePlay = false;
         soundPing.play()
+        countDownToStart = 3
+      } else {
+        this.isGoal = false
       }
     } else {
       if (theBall.pos.x < 0 - theBall.size) {
         theBall.reset();
         theBall.moveX *= -1; // reverse servis bola pemain
         this.score++;
+        this.isGoal = true
         gamePlay = false;
         soundPing.play()
+        countDownToStart = 3
+      } else {
+        this.isGoal = false
       }
     }
   }
