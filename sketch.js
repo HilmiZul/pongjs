@@ -1,30 +1,37 @@
 let video;
 let handPose;
 let hands = [];
-let pose;
 let leftWrist;
 let rightWrist;
 
 let player_kiri;
 let player_kanan;
-let bola;
-let wMeja;
-let hMeja;
-let skorbar = 50;
+let ball;
+let tableWidth;
+let tableHeight;
+let scoreBar = 50;
 let gamePlay = false;
 let gameOver = false
 let gameWin = {
   right: false,
   left: false
 }
-let poin = 11
+let point = 11
+let countDownToStart = 3
+
+let soundPing;
+let soundTok;
+let soundCongrats;
+
 
 function preload() {
   handPose = ml5.handPose({ flipped: true });
+  soundPing = loadSound("./assets/audio/ping.m4a")
+  soundTok = loadSound("./assets/audio/tok.m4a")
+  soundCongrats = loadSound("./assets/audio/congrats.m4a")
 }
 
 function setup() {
-	//createCanvas(950, 550);
 	createCanvas(windowWidth - 50, windowHeight - 150);
 
   video = createCapture(VIDEO, { flipped: true });
@@ -32,12 +39,12 @@ function setup() {
   video.hide();
   handPose.detectStart(video, modelReady);
 
-	wMeja = width;
-	hMeja = height;
+	tableWidth = width;
+	tableHeight = height;
 
-	player_kiri = new Paddle("kiri", "red", 0);
-	player_kanan = new Paddle("kanan", "yellow", 0);
-	bola = new Ball()
+	player_kiri = new Paddle("kiri", 0);
+	player_kanan = new Paddle("kanan", 0);
+	ball = new Ball()
 }
 
 function modelReady(results) {
@@ -45,36 +52,40 @@ function modelReady(results) {
 }
 
 function game() {
-	// bola
-	bola.update();
-	bola.bouncing();
+	// a ball
+	ball.update();
+	ball.bouncing();
 
 	// player kiri
 	player_kiri.show()
-	player_kiri.gerak();
-	player_kiri.nepak(bola);
-	player_kiri.goal(bola);
-	player_kiri.cekTepi();
+	player_kiri.block(ball);
+	player_kiri.goal(ball);
 
-  // check if skor = 11 poin sesuai rule pingpong
-  if(player_kiri.skor == poin) {
+  // check if skor = 11 point sesuai rule pingpong
+  if(player_kiri.score == point) {
+    player_kanan.isGoal = false
+    player_kiri.isGoal = false
     gameOver = true
     gameWin.left = true
     gameWin.right = false
+    soundPing.stop()
+    soundCongrats.play()
   }
 
 	// player kanan
 	player_kanan.show()
-	player_kanan.gerak();
-	player_kanan.nepak(bola);
-	player_kanan.goal(bola);
-	player_kanan.cekTepi();
+	player_kanan.block(ball);
+	player_kanan.goal(ball);
 
-  // check if skor = 11 poin sesuai rule pingpong
-  if(player_kanan.skor == poin) {
+  // check if skor = 11 point sesuai rule pingpong
+  if(player_kanan.score == point) {
+    player_kanan.isGoal = false
+    player_kiri.isGoal = false
     gameOver = true
     gameWin.left = false
     gameWin.right = true
+    soundPing.stop()
+    soundCongrats.play()
   }
 }
 
@@ -83,29 +94,21 @@ function meja() {
 	noFill();
 	stroke(255);
 	strokeWeight(5);
-	rect(0, 0 + skorbar, wMeja, hMeja - skorbar);
-	line(wMeja / 2, 0 + skorbar, wMeja / 2, hMeja);
+	rect(0, 0 + scoreBar, tableWidth, tableHeight - scoreBar);
+	line(tableWidth / 2, 0 + scoreBar, tableWidth / 2, tableHeight);
 	strokeWeight(3);
-	// line(0, hMeja / 2 + skorbar / 2, wMeja, hMeja / 2 + skorbar / 2);
-	if (!gamePlay && hands.length > 0) {
-		push();
-		fill(255);
-		noStroke();
-		textSize(20);
-		textAlign(CENTER, CENTER)
-		text("TEKAN SPASI UNTUK MAIN", width / 2, 30);
-		pop();
-	}
+	// line(0, tableHeight / 2 + scoreBar / 2, tableWidth, tableHeight / 2 + scoreBar / 2);
 	pop();
 }
 
-function skor() {
+function displayScore() {
 	push();
 	fill(255);
-	textSize(25);
+  noStroke()
+	textSize(35);
 	textAlign(CENTER, CENTER)
-	text(player_kiri.skor, 30, 30);
-	text(player_kanan.skor, width - 40, 30);
+	text(player_kiri.score, 30, 25);
+	text(player_kanan.score, width - 40, 25);
 	pop();
 }
 
@@ -114,21 +117,66 @@ function draw() {
 	background(100, 100, 250);
 
 	meja();
-	skor();
+	displayScore();
 
-  bola.show();
+  ball.show();
 
   if(hands.length > 0) {
     player_kiri.show();
     player_kanan.show();
+
+    if(countDownToStart < 0) {
+      gamePlay = true
+    } else {
+      push()
+      background(0, 0, 0, 200)
+
+      push()
+      fill(250, 100, 100)
+      stroke(255)
+      strokeWeight(5)
+      rectMode(CENTER)
+      rect(width/2, height/2, 400, 350, 30)
+      pop()
+
+      fill(255, 255, 255)
+      noStroke()
+      textAlign(CENTER, CENTER)
+
+      if(player_kanan.isGoal) {
+        textSize(70)
+        text(`⬅️`, width/2, height/2 - 100)
+      } else if(player_kiri.isGoal) {
+        textSize(70)
+        text(`➡️`, width/2, height/2 - 100)
+      }
+      textSize(50);
+      text('Ready in...', width/2, height/2)
+      text(countDownToStart, width/2, height/2 + 100)
+      pop()
+      if (frameCount % 60 == 0) {
+        countDownToStart--
+      }
+    }
   } else {
+    gamePlay = false
+    countDownToStart = 3
     push()
+    background(0, 0, 0, 200)
+
+    push()
+    fill(250, 100, 100)
+    stroke(255)
+    strokeWeight(5)
+    rectMode(CENTER)
+    rect(width/2, height/2, 600, 200, 30)
+    pop()
+
     fill(255, 255, 255)
-    strokeWeight(2);
-    stroke(0, 0, 0)
-    textSize(100);
+    noStroke()
+    textSize(50);
     textAlign(CENTER, CENTER)
-    text('Angkat Kedua Tanganmu!', width/2, height/2)
+    text('Put both hands up! 🙌🏻', width/2, height/2)
     pop()
   }
 
@@ -140,55 +188,58 @@ function draw() {
     noLoop()
     push()
     background(0, 0, 0, 200)
-    textSize(60)
+
+    push()
+    fill(100, 100, 250)
+    stroke(255)
+    strokeWeight(5)
+    rectMode(CENTER)
+    rect(width/2, height/2, 700, 300, 30)
+    pop()
+
+    fill(255)
+    noStroke()
+    textSize(50)
     textAlign(CENTER, CENTER)
-    text("Selamat Player Kiri Menang!", width / 2, height / 2)
+    text("🎉 LEFT PLAYER WINS! 👏🏻", width / 2, height / 2 - 50)
     textSize(50)
     textAlign(CENTER, BOTTOM)
-    text("Tekan ENTER untuk Permainan Baru", width / 2, height - 200)
+    text("Press ENTER", width / 2, height - 300)
     pop()
   } else if(gameOver && gameWin.right) {
     noLoop()
     push()
     background(0, 0, 0, 200)
-    textSize(60)
+
+    push()
+    fill(100, 100, 250)
+    stroke(255)
+    strokeWeight(5)
+    rectMode(CENTER)
+    rect(width/2, height/2, 700, 300, 30)
+    pop()
+
+    fill(255)
+    noStroke()
+    textSize(50)
     textAlign(CENTER, CENTER)
-    text("Selamat Player Kanan Menang!", width / 2, height / 2)
+    text("🎉 RIGHT PLAYER WINS! 👏🏻", width / 2, height / 2 - 50)
     textSize(50)
     textAlign(CENTER, BOTTOM)
-    text("Tekan ENTER untuk Permainan Baru", width / 2, height - 200)
+    text("Press ENTER", width / 2, height - 300)
     pop()
   }
 }
 
 function keyPressed() {
-  // DISABLE KEY CONTROL sementara, karena kontrol player dihandle oleh handPose wrist
-	// if (key === "w") player_kiri.atas = true;
-	// if (key === "s") player_kiri.bawah = true;
-	// if (key === "i") player_kanan.atas = true;
-	// if (key === "k") player_kanan.bawah = true;
-
-	if (key === " ") {
-    if(hands.length > 0) gamePlay = true
-  }
-
 	if (keyCode === RETURN) {
     gamePlay = false
     gameOver = false
     gameWin.left = false
     gameWin.right = false
-    player_kanan.skor = 0
-    player_kiri.skor = 0
-    bola.reset()
+    player_kanan.score = 0
+    player_kiri.score = 0
+    ball.reset()
     loop()
   }
-	if (keyCode === ESCAPE) gamePlay = false;
 }
-
-// DISALBE KEY CONTROL
-// function keyReleased() {
-// 	player_kiri.atas = false;
-// 	player_kiri.bawah = false;
-// 	player_kanan.atas = false;
-// 	player_kanan.bawah = false;
-// }
