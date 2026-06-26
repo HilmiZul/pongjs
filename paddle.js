@@ -25,8 +25,6 @@ class Paddle {
           leftWrist = hand.keypoints[0];
           this.pos.x = 0 + this.width;
           this.pos.y = lerp(this.pos.y, leftWrist.y, 0.01)
-          stroke(0)
-          strokeWeight(2)
           rect(
             this.pos.x,
             this.pos.y,
@@ -40,8 +38,6 @@ class Paddle {
           rightWrist = hand.keypoints[0];
           this.pos.x = width - this.width * 2
           this.pos.y = lerp(this.pos.y, rightWrist.y, 0.01)
-          stroke(0)
-          strokeWeight(2)
           rect(
             this.pos.x,
             this.pos.y,
