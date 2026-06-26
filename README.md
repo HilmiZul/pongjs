@@ -4,6 +4,10 @@ Bahan untuk Workshop **IT Club** Game Dev. `Build your Own Pong! using p5.js`
 
 # Update 🗣️
 
+### v1.2 - 26 Juni 2026 - Minor update
+- Refactoring and game play full control using Hand Pose!
+- Add some audio
+
 ### v1.1 - 24 Juni 2026 - Minor update
 - Update gamePlay validate before hand is detected
 - Center canvas and redesign button
