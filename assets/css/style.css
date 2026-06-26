@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "FredokaOne";
+  src: url("../font/FredokaOne.ttf")
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  font-family: "FredokaOne";
+}
+canvas {
+  margin: 0 auto;
+}
+
+button {
+  border: 2px solid #fff;
+  background-color: #000;
+  padding-left: 7px;
+  padding-right: 7px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  color: #fff;
+  font-family: "FredokaOne"
+}
+
+button:hover {
+  color: #000;
+  background-color: #fff;
+}
+
+h3 {
+  margin-bottom: 0
+}
+
+p {
+  font-size: small;
+  padding: 0
+}
+
+a {
+  color: #fff
+}
